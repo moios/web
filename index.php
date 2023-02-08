@@ -1,6 +1,6 @@
 <?php
-$cadena = "http://google.com";
-$url = md5($cadena);
+$cadena = "https://www.google.com";
+$url = base64_encode($cadena);
 
 echo "<a href='".$url."'> ir </a>";
 ?>
