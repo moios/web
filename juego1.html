@@ -9,11 +9,8 @@
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --accent-color: #38bdf8;
-            --accent-hover: #0ea5e9;
             --text-color: #f8fafc;
             --text-muted: #94a3b8;
-            --danger: #ef4444;
-            --success: #22c55e;
         }
 
         body {
@@ -94,7 +91,7 @@
 <div class="game-container">
     <div class="status-bar">
         <span id="location-name">Lugar: Vestíbulo</span>
-        <span id="clues-count">Pistas: 0/3</span>
+        <span id="clues-count">Pistas: 0/2</span>
     </div>
     <div id="game-content">
         <!-- Contenido dinámico por JS -->
@@ -111,6 +108,7 @@
     const scenes = {
         hall: {
             title: "El Vestíbulo Oscuro",
+            locationName: "Vestíbulo",
             text: "Entras a la antigua mansión del profesor Blackwood. La puerta se cierra de golpe a tus espaldas. El aire huele a humedad y misterio. Frente a una escalera de roble, hay una mesita con un extraño diario y una puerta lateral abierta.",
             choices: [
                 { text: "Revisar la mesita y leer el diario", action: () => goToScene('diary') },
@@ -120,10 +118,10 @@
         },
         diary: {
             title: "El Diario del Profesor",
+            locationName: "Vestíbulo (Diario)",
             text: "Pasas las páginas polvorientas. Una nota cae al suelo: <br><em>'La combinación de la caja fuerte oculta en mi estudio es el número de pinturas colgadas en la mansión (4) menos uno... El secreto está en los libros.'</em><br><b>¡Has descubierto una pista clave!</b>",
             action: () => {
                 if(!gameState.hasKey && gameState.clues < 1) gameState.clues++;
-                updateStatus();
             },
             choices: [
                 { text: "Ir a la biblioteca", action: () => goToScene('library') },
@@ -132,6 +130,7 @@
         },
         library: {
             title: "La Biblioteca silenciosa",
+            locationName: "Biblioteca",
             text: "Estanterías gigantescas llegan hasta el techo. En el centro hay un escritorio con un cajón cerrado con llave y una estantería ligeramente movida.",
             choices: [
                 { text: "Empujar la estantería secreta", action: () => goToScene('secretRoom') },
@@ -147,11 +146,11 @@
         },
         secretRoom: {
             title: "La Habitación Oculta",
+            locationName: "Habitación Oculta",
             text: "Al mover la estantería, encuentras una pequeña caja fuerte empotrada en la pared y una llave dorada colgada en la pared junto a ella.",
             action: () => {
                 gameState.hasKey = true;
                 if(gameState.clues < 2) gameState.clues++;
-                updateStatus();
             },
             choices: [
                 { text: "Tomar la llave dorada y regresar a la biblioteca", action: () => goToScene('library') }
@@ -159,6 +158,7 @@
         },
         win: {
             title: "¡Misterio Resuelto!",
+            locationName: "Jardín Exterior",
             text: "Abres el escritorio con la llave dorada y descubres el testamento del profesor y un pasadizo que conduce al jardín exterior a plena luz del día. ¡Has escapado y resuelto el misterio con éxito!",
             choices: [
                 { text: "Jugar de nuevo", action: () => resetGame() }
@@ -167,4 +167,45 @@
     };
 
     function goToScene(sceneKey) {
-        gameState.current
+        gameState.currentScene = sceneKey;
+        const scene = scenes[sceneKey];
+        
+        if (scene.action) scene.action();
+
+        let html = `<h2>${scene.title}</h2><p>${scene.text}</p><div class="choices">`;
+        scene.choices.forEach(choice => {
+            html += `<button class="choice-btn" onclick="runAction(${JSON.stringify(choice.text)})">${choice.text}</button>`;
+        });
+        html += `</div>`;
+
+        document.getElementById('game-content').innerHTML = html;
+        updateStatus();
+    }
+
+    function runAction(choiceText) {
+        const scene = scenes[gameState.currentScene];
+        const choice = scene.choices.find(c => c.text === choiceText);
+        if (choice && choice.action) {
+            choice.action();
+        }
+    }
+
+    function updateStatus() {
+        const scene = scenes[gameState.currentScene];
+        document.getElementById('location-name').innerText = `Lugar: ${scene.locationName}`;
+        document.getElementById('clues-count').innerText = `Pistas: ${gameState.clues}/2`;
+    }
+
+    function resetGame() {
+        gameState.currentScene = 'hall';
+        gameState.clues = 0;
+        gameState.hasKey = false;
+        goToScene('hall');
+    }
+
+    // Iniciar juego
+    goToScene('hall');
+</script>
+
+</body>
+</html>
