@@ -1,211 +1,186 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Misterio en la Mansión - Minijuego</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #38bdf8;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .game-container {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 600px;
-            padding: 25px;
-            box-sizing: border-box;
-            border: 1px solid #334155;
-        }
-
-        h2 {
-            margin-top: 0;
-            color: var(--accent-color);
-            font-size: 1.5rem;
-            border-bottom: 2px solid #334155;
-            padding-bottom: 10px;
-        }
-
-        p {
-            line-height: 1.6;
-            font-size: 1rem;
-            color: var(--text-color);
-        }
-
-        .choices {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        button.choice-btn {
-            background-color: #334155;
-            color: var(--text-color);
-            border: none;
-            padding: 12px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            text-align: left;
-            transition: all 0.2s ease;
-        }
-
-        button.choice-btn:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            transform: translateX(4px);
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            border-bottom: 1px dashed #334155;
-            padding-bottom: 8px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>La mansión Valdemar</title>
+<!-- Sabia que vendrias aqui a buscar la respuesta, CAISTE -->
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:radial-gradient(ellipse at 50% 0%,#4a3b2c 0%,#21180f 70%);--ink:#eadfc8;--accent:#c9a45c;--dark:0;--r:0px;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{min-height:100%}
+body{margin:0;background:#0e0a07;background-image:var(--bg);background-attachment:fixed;color:var(--ink);
+  font-family:"IM Fell English",Georgia,"Times New Roman",serif;transition:background 1.5s,color 1.5s;cursor:none}
+.sc{font-family:"IM Fell English SC",Georgia,serif}
+#luz{position:fixed;inset:0;pointer-events:none;z-index:40;transition:opacity .3s;
+  background:radial-gradient(circle var(--r) at var(--x,50%) var(--y,50%),rgba(255,214,150,.07) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,var(--dark)) 100%)}
+#cursor{position:fixed;width:14px;height:14px;border-radius:50%;background:#ffe2a8;box-shadow:0 0 18px 6px rgba(255,200,120,.5);
+  pointer-events:none;z-index:50;transform:translate(-50%,-50%)}
+.ink{color:#2a2018;transition:color .1s;font-style:italic}
+.btn{border:1px solid var(--accent);color:var(--ink);padding:.7rem 1rem;text-align:left;transition:background .2s,transform .2s;width:100%}
+.btn:hover,.btn:focus-visible{background:rgba(201,164,92,.15);transform:translateX(4px);outline:none}
+input{background:transparent;border-bottom:1px solid var(--accent);color:var(--ink);outline:none;padding:.4rem 0;width:100%;font-size:1.15rem}
+.shake{animation:sh .4s}
+@keyframes sh{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.flick{animation:fl 6s infinite}
+@keyframes fl{0%,92%,100%{opacity:1}93%{opacity:.6}95%{opacity:1}97%{opacity:.4}}
+@media (prefers-reduced-motion:reduce){.flick,.shake{animation:none}}
+@media (hover:none){body{cursor:auto}#cursor{display:none}}
+</style>
 </head>
 <body>
+<div id="luz"></div><div id="cursor"></div>
 
-<div class="game-container">
-    <div class="status-bar">
-        <span id="location-name">Lugar: Vestíbulo</span>
-        <span id="clues-count">Pistas: 0/2</span>
-    </div>
-    <div id="game-content">
-        <!-- Contenido dinámico por JS -->
-    </div>
-</div>
+<main class="relative z-10 max-w-2xl mx-auto px-5 py-10 sm:py-16">
+  <header class="flex justify-between items-baseline mb-10 text-sm opacity-80">
+    <span class="sc tracking-wide">La mansión Valdemar</span>
+    <span id="estado"></span>
+  </header>
+  <article id="escena"></article>
+  <footer class="mt-16 text-sm opacity-60">
+    <p>Finales descubiertos: <span id="finales">0</span> de 10</p>
+    <button id="reiniciar" class="underline mt-2">Volver a empezar</button>
+  </footer>
+</main>
 
 <script>
-    const gameState = {
-        currentScene: 'hall',
-        clues: 0,
-        hasKey: false
-    };
+const STAGES=[
+ {bg:"radial-gradient(ellipse at 50% 0%,#4a3b2c 0%,#21180f 70%)",ink:"#eadfc8",dark:0,r:0},
+ {bg:"radial-gradient(ellipse at 50% 0%,#33281e 0%,#140e09 75%)",ink:"#d4c6a8",dark:.55,r:280},
+ {bg:"radial-gradient(ellipse at 30% 10%,#2a1d1d 0%,#0d0808 75%)",ink:"#b9a888",dark:.78,r:230},
+ {bg:"radial-gradient(ellipse at 70% 20%,#1e1a24 0%,#08070a 80%)",ink:"#a0927a",dark:.88,r:200},
+ {bg:"radial-gradient(ellipse at 50% 50%,#1a2420 0%,#050806 80%)",ink:"#8f8270",dark:.94,r:175},
+ {bg:"radial-gradient(ellipse at 50% 100%,#2b0a0a 0%,#030202 75%)",ink:"#857565",dark:.975,r:150}
+];
+let S;
+const reset=()=>{S={cordura:5,f:{}}};
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(",",".").replace(/\s+/g,"").trim();
 
-    const scenes = {
-        hall: {
-            title: "El Vestíbulo Oscuro",
-            locationName: "Vestíbulo",
-            text: "Entras a la antigua mansión del profesor Blackwood. La puerta se cierra de golpe a tus espaldas. El aire huele a humedad y misterio. Frente a una escalera de roble, hay una mesita con un extraño diario y una puerta lateral abierta.",
-            choices: [
-                { text: "Revisar la mesita y leer el diario", action: () => goToScene('diary') },
-                { text: "Entrar por la puerta lateral hacia la biblioteca", action: () => goToScene('library') },
-                { text: "Intentar abrir la puerta principal", action: () => alert("¡Está cerrada con seguro! Debes encontrar otra salida.") }
-            ]
-        },
-        diary: {
-            title: "El Diario del Profesor",
-            locationName: "Vestíbulo (Diario)",
-            text: "Pasas las páginas polvorientas. Una nota cae al suelo: <br><em>'La combinación de la caja fuerte oculta en mi estudio es el número de pinturas colgadas en la mansión (4) menos uno... El secreto está en los libros.'</em><br><b>¡Has descubierto una pista clave!</b>",
-            action: () => {
-                if(!gameState.hasKey && gameState.clues < 1) gameState.clues++;
-            },
-            choices: [
-                { text: "Ir a la biblioteca", action: () => goToScene('library') },
-                { text: "Volver al vestíbulo", action: () => goToScene('hall') }
-            ]
-        },
-        library: {
-            title: "La Biblioteca silenciosa",
-            locationName: "Biblioteca",
-            text: "Estanterías gigantescas llegan hasta el techo. En el centro hay un escritorio con un cajón cerrado con llave y una estantería ligeramente movida.",
-            choices: [
-                { text: "Empujar la estantería secreta", action: () => goToScene('secretRoom') },
-                { text: "Inspeccionar el escritorio cerrado", action: () => {
-                    if(gameState.hasKey) {
-                        goToScene('win');
-                    } else {
-                        alert("El escritorio está cerrado con llave. Necesitas encontrarla.");
-                    }
-                }},
-                { text: "Volver al vestíbulo", action: () => goToScene('hall') }
-            ]
-        },
-        secretRoom: {
-            title: "La Habitación Oculta",
-            locationName: "Habitación Oculta",
-            text: "Al mover la estantería, encuentras una pequeña caja fuerte empotrada en la pared y una llave dorada colgada en la pared junto a ella.",
-            action: () => {
-                gameState.hasKey = true;
-                if(gameState.clues < 2) gameState.clues++;
-            },
-            choices: [
-                { text: "Tomar la llave dorada y regresar a la biblioteca", action: () => goToScene('library') }
-            ]
-        },
-        win: {
-            title: "¡Misterio Resuelto!",
-            locationName: "Jardín Exterior",
-            text: "Abres el escritorio con la llave dorada y descubres el testamento del profesor y un pasadizo que conduce al jardín exterior a plena luz del día. ¡Has escapado y resuelto el misterio con éxito!",
-            choices: [
-                { text: "Jugar de nuevo", action: () => resetGame() }
-            ]
-        }
-    };
+const E={
+1:{t:"La cobardía es un refugio",bueno:false,x:"Diste la espalda a la mansión. Nunca supiste qué te llamaba desde esas ventanas. Cada noche, a las 3:15, alguien golpea tu puerta tres veces."},
+2:{t:"Entre los estantes",bueno:false,x:"Los estantes giraron y te sellaron en un hueco entre libros prohibidos. Tu nombre aparece ahora, escrito a mano, en el índice del catálogo de Valdemar."},
+3:{t:"Sujeto número trece",bueno:false,x:"El líquido quemaba y luego no sentiste nada. Despertaste en una cápsula, numerado. El doctor anota tus constantes con una caligrafía impecable."},
+4:{t:"El nuevo doctor",bueno:false,x:"Aceptaste. Su mente se vertió en la tuya como tinta en agua. Ahora tú caminas por la mansión, y recuerdas cosas que nunca viviste. Envías una carta a un nuevo invitado."},
+5:{t:"El mayordomo leal",bueno:false,x:"Bastián sonrió por primera vez. «El doctor siempre necesita invitados que confíen», dijo, y cerró la cámara desde fuera. Sin la llave del sótano no había otra salida."},
+6:{t:"Fuego purificador",bueno:null,x:"Las llamas devoraron el laboratorio, los frascos y los secretos. Escapaste entre el humo. Nadie creyó tu historia, y bajo las cenizas algo siguió zumbando."},
+7:{t:"La verdad publicada",bueno:true,x:"Con el diario de Valdemar en tus manos, los periódicos publicaron cada experimento. La mansión fue clausurada. Pero Elena nunca apareció en ninguna lista de rescatados."},
+8:{t:"El eterno retorno",bueno:false,x:"Las agujas giraron hacia atrás. Estás otra vez frente a la reja, con la carta en la mano. Tienes la extraña sensación de haber leído esto antes."},
+9:{t:"La liberación de Elena",bueno:true,x:"Bastián abrió la última compuerta con la llave oxidada. Elena, la hija del doctor, respiró por primera vez en veinte años. La máquina se apagó y, con ella, la voz de Valdemar. Al amanecer, la mansión era solo una casa vieja."},
+10:{t:"La razón quebrada",bueno:false,x:"Las voces de los retratos se volvieron la tuya. Ya no distingues las paredes de tus pensamientos. Te quedas en la mansión. Siempre fue tu casa."}
+};
 
-    function goToScene(sceneKey) {
-        gameState.currentScene = sceneKey;
-        const scene = scenes[sceneKey];
-        
-        if (scene.action) scene.action();
+const SC={
+intro:{st:0,t:"Una carta sin remitente",x:`<p>«Estimado invitado: los secretos de mi trabajo no pueden morir conmigo. Venga esta noche. La puerta reconocerá a quien sepa contar. Dr. Aurelio Valdemar.»</p>
+<p>La mansión se alza sobre la colina, con una sola ventana encendida en el último piso. El portón está entreabierto y la niebla huele a formol.</p>`,
+ ch:[{t:"Cruzar el portón",to:"vestibulo"},{t:"Romper la carta y volver a casa",end:1}]},
 
-        let html = `<h2>${scene.title}</h2><p>${scene.text}</p><div class="choices">`;
-        scene.choices.forEach(choice => {
-            html += `<button class="choice-btn" onclick="runAction(${JSON.stringify(choice.text)})">${choice.text}</button>`;
-        });
-        html += `</div>`;
+vestibulo:{st:1,t:"El vestíbulo",x:`<p>Un candelabro cubierto de telarañas apenas ilumina el salón. La puerta interior tiene una cerradura de rodillos numerados y una inscripción grabada en bronce.</p>
+<p><span class="ink">El doctor odiaba los números que se leen igual al revés.</span></p>`,
+ rq:{q:"«Soy el menor primo que, leído al revés, es otro primo distinto, y mis cifras suman cuatro.» ¿Qué número abre la puerta?",a:["13"],pista:"Descarta el 11: al revés sigue siendo él mismo.",ok:"hall",fail:"sotano",fx:"El suelo cede bajo tus pies."}},
 
-        document.getElementById('game-content').innerHTML = html;
-        updateStatus();
-    }
+sotano:{st:2,t:"El sótano",x:`<p>Caes entre cajas húmedas. Algo gotea en la oscuridad. Sobre un clavo cuelga una llave oxidada, y en un rincón hay un cubo de agua que brilla con un verde enfermizo.</p>
+<p><span class="ink">No bebas. Nada aquí es agua.</span></p>`,
+ ch:[{t:"Tomar la llave y subir por la escalera de servicio",to:"hall",fx:()=>S.f.llave=1},
+     {t:"Beber el agua: tienes la garganta seca",end:3},
+     {t:"Subir sin tocar nada",to:"hall",fx:()=>S.cordura--}]},
 
-    function runAction(choiceText) {
-        const scene = scenes[gameState.currentScene];
-        const choice = scene.choices.find(c => c.text === choiceText);
-        if (choice && choice.action) {
-            choice.action();
-        }
-    }
+hall:{st:1,t:"La gran escalera",x:`<p>Un hombre alto, de guantes blancos, baja la escalera sin hacer ruido. «Soy Bastián. Sirvo a esta casa desde antes de que el doctor… cambiara. Si busca la verdad, empiece por la biblioteca.»</p>
+<p>A lo lejos, un piano toca solo.</p>`,
+ ch:[{t:"Confiar en Bastián y pedirle que te acompañe",to:"biblioteca",fx:()=>S.f.aliado=1},
+     {t:"Agradecer y seguir solo",to:"biblioteca"},
+     {t:"Seguir la música del piano",to:"musica",fx:()=>S.cordura--}]},
 
-    function updateStatus() {
-        const scene = scenes[gameState.currentScene];
-        document.getElementById('location-name').innerText = `Lugar: ${scene.locationName}`;
-        document.getElementById('clues-count').innerText = `Pistas: ${gameState.clues}/2`;
-    }
+musica:{st:2,t:"El salón de música",x:`<p>Las teclas se hunden sin nadie que las toque. En el atril, una partitura titulada «Para Elena». Sobre el piano, la foto de una niña con la misma mirada del doctor.</p>
+<p><span class="ink">Ella sigue aquí. Debajo de todo.</span></p>`,
+ ch:[{t:"Guardar la foto y salir hacia la biblioteca",to:"biblioteca",fx:()=>S.f.foto=1}]},
 
-    function resetGame() {
-        gameState.currentScene = 'hall';
-        gameState.clues = 0;
-        gameState.hasKey = false;
-        goToScene('hall');
-    }
+biblioteca:{st:2,t:"La biblioteca",x:`<p>Miles de volúmenes cubren las paredes hasta el techo. Un atril sostiene un diario cerrado con un candado de letras. En la tapa, una frase cifrada: <b class="tracking-widest">YDOGHPDU</b>.</p>
+<p><span class="ink">El emperador avanzaba tres pasos. Tú debes retroceder.</span></p>`,
+ rq:{q:"¿Qué palabra abre el candado del diario?",a:["valdemar"],pista:"Cifrado de César: cada letra fue movida tres lugares. Y es Valdemar, que es D.",ok:"pasillo",okfx:()=>S.f.diario=1,fail:()=>S.f.aliado?"rescate":{end:2},fx:"Los estantes empiezan a moverse."}},
 
-    // Iniciar juego
-    goToScene('hall');
+rescate:{st:2,t:"Una mano enguantada",x:`<p>Los estantes se cierran, pero una mano te arrastra por el hueco en el último instante. Bastián jadea. «No vuelva a fallar. La casa aprende.»</p>`,
+ ch:[{t:"Seguir a Bastián al pasillo",to:"pasillo"}]},
+
+pasillo:{st:3,t:"El pasillo de los retratos",x:`<p>${''}Los retratos de la familia Valdemar te siguen con la mirada. Al fondo, un reloj de pie detenido a las <b>3:15</b> bloquea la puerta del laboratorio. Un grabado dice: «Mide la distancia entre la hora y el minuto, y el tiempo te dejará pasar».</p>
+<p><span class="ink">La aguja corta nunca se queda quieta.</span></p>`,
+ rq:{q:"¿Cuántos grados separan las agujas a las 3:15?",a:["7.5","7.5°","7.5grados"],pista:"La aguja de la hora avanza 0,5° por minuto: a las 3:15 no está justo en el 3.",ok:"laboratorio",fail:{end:8},fx:"El péndulo empieza a moverse hacia atrás."}},
+
+laboratorio:{st:4,t:"El laboratorio",x:`<p>Tubos burbujean bajo luces verdes. Una terminal antigua parpadea: <b>2, 3, 5, 9, 17, 33, ?</b></p>
+<p>En una mesa, un frasco etiquetado «Suero V-13». Junto a la pared, bidones de alcohol.</p>
+<p><span class="ink">Duplica y resta. Siempre resta.</span></p>`,
+ rq:{q:"Completa la secuencia para leer los archivos del doctor.",a:["65"],pista:"Cada término es el anterior multiplicado por dos, menos uno.",ok:"archivos",fail:"laboratorio2",fx:"La terminal se apaga con un chasquido."}},
+
+archivos:{st:4,t:"Los archivos de Valdemar",x:`<p>«Día 7300. Mi cuerpo falla, pero mi mente ya vive en la máquina de la cámara. Elena alimenta el sistema con su sueño. Necesito un cuerpo nuevo. El invitado de esta noche será perfecto.»</p>
+<p>Entiendes, al fin, para qué te invitaron.</p>`,
+ ch:[{t:"Bajar a la cámara a enfrentarlo",to:"camara"},
+     {t:"Prender fuego al laboratorio",end:6},
+     {t:"Beber el suero V-13 para resistir su mente",end:3}]},
+
+laboratorio2:{st:4,t:"El laboratorio a oscuras",x:`<p>La terminal muere. Sin los archivos no sabes qué te espera abajo, solo que algo zumba detrás de la puerta de hierro.</p>`,
+ ch:[{t:"Bajar a la cámara",to:"camara",fx:()=>S.cordura--},
+     {t:"Prender fuego al laboratorio",end:6},
+     {t:"Beber el suero V-13",end:3}]},
+
+camara:{st:5,t:"La cámara",x:`<p>Una máquina enorme late como un corazón. En una cápsula de vidrio duerme una mujer joven: Elena. La voz del doctor sale de los altavoces.</p>
+<p>«Bienvenido. Ocupe mi lugar y vivirá para siempre. O intente salvarla: su vida depende de tres frascos.»</p>
+<p><span class="ink">Solo uno de ellos dice la verdad.</span></p>`,
+ ch:[{t:"Aceptar la oferta del doctor",end:4},{t:"Rechazarla y acercarte a los frascos",to:"boveda"}]},
+
+boveda:{st:5,t:"Los tres frascos",x:`<p>Tres frascos con etiquetas manuscritas. Solo uno contiene el antídoto que despierta a Elena, y solo una etiqueta dice la verdad.</p>
+<p><b>Rojo:</b> «El antídoto no está en mí».<br><b>Verde:</b> «El antídoto está en el azul».<br><b>Azul:</b> «El verde miente».</p>`,
+ rq:{q:"¿Qué frasco contiene el antídoto? (rojo, verde o azul)",a:["rojo"],tries:1,pista:"Prueba cada frasco como si fuera el correcto y cuenta cuántas etiquetas resultan verdaderas.",ok:()=>({end:S.f.aliado?(S.f.llave?9:5):(S.f.diario?7:6)}),fail:{end:3},fx:""}}
+};
+
+const $=id=>document.getElementById(id);
+function stage(n){const s=STAGES[n],r=document.documentElement.style;
+ r.setProperty("--bg",s.bg);r.setProperty("--ink",s.ink);r.setProperty("--dark",s.dark);r.setProperty("--r",s.r+"px");
+ document.body.classList.toggle("flick",n>=4)}
+function status(){const it=[S.f.llave&&"llave oxidada",S.f.diario&&"diario",S.f.foto&&"foto de Elena",S.f.aliado&&"Bastián"].filter(Boolean);
+ $("estado").textContent="Cordura "+"●".repeat(Math.max(S.cordura,0))+"○".repeat(5-Math.max(S.cordura,0))+(it.length?" | "+it.join(", "):"")}
+function resolve(t){if(typeof t==="function")t=t();if(typeof t==="string")return go(t);end(t.end)}
+function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);status();
+ let h=`<h1 class="sc text-4xl sm:text-5xl mb-6 leading-tight" style="color:var(--accent)">${sc.t}</h1><div class="space-y-4 text-lg leading-relaxed">${sc.x}</div>`;
+ if(sc.ch)h+=`<div class="mt-8 space-y-3">${sc.ch.map((c,i)=>`<button class="btn" data-i="${i}">${c.t}</button>`).join("")}</div>`;
+ if(sc.rq){const max=sc.rq.tries||3;h+=`<div id="rq" class="mt-8 p-5 border" style="border-color:var(--accent)">
+  <p class="mb-4 italic">${sc.rq.q}</p><input id="resp" autocomplete="off" aria-label="Respuesta">
+  <div class="flex gap-3 mt-4 flex-wrap"><button id="enviar" class="btn !w-auto">Responder</button><button id="pista" class="btn !w-auto">Pedir pista (cuesta cordura)</button></div>
+  <p id="msg" class="mt-3 text-sm" aria-live="polite">Intentos: ${max}</p></div>`}
+ const a=$("escena");a.innerHTML=h;window.scrollTo(0,0);
+ a.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const c=sc.ch[b.dataset.i];c.fx&&c.fx();if(S.cordura<=0)return end(10);c.end?end(c.end):go(c.to)});
+ if(sc.rq){let n=sc.rq.tries||3;const send=()=>{const v=norm($("resp").value);if(!v)return;
+   if(sc.rq.a.map(norm).includes(v)){sc.rq.okfx&&sc.rq.okfx();resolve(sc.rq.ok)}
+   else{n--;$("rq").classList.remove("shake");void $("rq").offsetWidth;$("rq").classList.add("shake");
+    if(n<=0){$("msg").textContent=sc.rq.fx||"";setTimeout(()=>resolve(sc.rq.fail),1200)}else $("msg").textContent=`Incorrecto. Intentos: ${n}`}};
+  $("enviar").onclick=send;$("resp").onkeydown=e=>e.key==="Enter"&&send();
+  $("pista").onclick=()=>{S.cordura--;status();if(S.cordura<=0)return end(10);$("msg").textContent=sc.rq.pista;$("pista").remove()};
+  $("resp").focus()}
+ lightInk()}
+function end(n){const e=E[n];stage(n===9||n===7?2:5);
+ let got=[];try{got=JSON.parse(localStorage.getItem("valdemar-finales")||"[]")}catch(_){}
+ if(!got.includes(n))got.push(n);try{localStorage.setItem("valdemar-finales",JSON.stringify(got))}catch(_){}
+ $("finales").textContent=got.length;
+ const col=e.bueno===true?"#9fc79a":e.bueno===false?"#c46a5a":"#c9a45c";
+ $("escena").innerHTML=`<p class="mb-2" style="color:${col}">Final ${n} de 10</p><h1 class="sc text-4xl sm:text-5xl mb-6">${e.t}</h1>
+ <p class="text-lg leading-relaxed">${e.x}</p><button id="otra" class="btn mt-10">Intentar otro camino</button>`;
+ $("otra").onclick=()=>{reset();go("intro")};window.scrollTo(0,0)}
+
+let mx=innerWidth/2,my=innerHeight/2;
+function lightInk(){document.querySelectorAll(".ink").forEach(el=>{const r=el.getBoundingClientRect();
+ const d=Math.hypot(mx-(r.left+r.width/2),my-(r.top+r.height/2));el.style.color=d<160?"#f3d9a4":"#2a2018"})}
+function move(x,y){mx=x;my=y;const r=document.documentElement.style;r.setProperty("--x",x+"px");r.setProperty("--y",y+"px");
+ $("cursor").style.left=x+"px";$("cursor").style.top=y+"px";lightInk()}
+addEventListener("mousemove",e=>move(e.clientX,e.clientY));
+addEventListener("touchmove",e=>{const t=e.touches[0];move(t.clientX,t.clientY)},{passive:true});
+addEventListener("touchstart",e=>{const t=e.touches[0];move(t.clientX,t.clientY)},{passive:true});
+addEventListener("scroll",lightInk,{passive:true});
+$("reiniciar").onclick=()=>{reset();go("intro")};
+try{$("finales").textContent=JSON.parse(localStorage.getItem("valdemar-finales")||"[]").length}catch(_){}
+reset();go("intro");
 </script>
-
 </body>
 </html>
