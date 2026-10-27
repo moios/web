@@ -7,6 +7,10 @@
     <title>Document</title>
 </head>
 <body>
+    <button id="boton-broma" style="position: absolute; padding: 15px 30px; font-size: 1.2rem; font-weight: bold; color: white; background-color: #ff4757; border: none; border-radius: 50px; cursor: pointer; transition: all 0.1s ease; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);">¡SÍ, CLARO!</button>
+
+
+
     <p>hola mundo</p>
     <p>Prueba de GitHub</p>
     <button>Click</button>
@@ -16,4 +20,21 @@
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <p>Hola mundito! los odio</p>
+
+
+
+    <button id="boton-broma" style="position: absolute; padding: 15px 30px; font-size: 1.2rem; font-weight: bold; color: white; background-color: #ff4757; border: none; border-radius: 50px; cursor: pointer; transition: all 0.1s ease; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);">¡SÍ, CLARO!</button>
+
+<script>
+    (function() {
+        const boton = document.getElementById('boton-broma');
+        boton.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - boton.clientWidth);
+            const y = Math.random() * (window.innerHeight - boton.clientHeight);
+            boton.style.left = x + 'px';
+            boton.style.top = y + 'px';
+        });
+    })();
+</script>
+
 </body>
