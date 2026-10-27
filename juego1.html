@@ -15,9 +15,12 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{min-height:100%}
 body{margin:0;background:#0e0a07;background-image:var(--bg);background-attachment:fixed;color:var(--ink);
-  font-family:"IM Fell English",Georgia,"Times New Roman",serif;transition:background 1.5s,color 1.5s;cursor:none}
+  font-family:"IM Fell English",Georgia,"Times New Roman",serif;transition:background 1.5s,color 1.5s;cursor:crosshair}
+button,input{cursor:pointer;position:relative;z-index:60}
+input{cursor:text}
 .sc{font-family:"IM Fell English SC",Georgia,serif}
-#luz{position:fixed;inset:0;pointer-events:none;z-index:40;transition:opacity .3s;
+#luz,#cursor{pointer-events:none!important}
+#luz{position:fixed;inset:0;z-index:40;transition:opacity .3s;
   background:radial-gradient(circle var(--r) at var(--x,50%) var(--y,50%),rgba(255,214,150,.07) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,var(--dark)) 100%)}
 #cursor{position:fixed;width:14px;height:14px;border-radius:50%;background:#ffe2a8;box-shadow:0 0 18px 6px rgba(255,200,120,.5);
   pointer-events:none;z-index:50;transform:translate(-50%,-50%)}
@@ -30,7 +33,7 @@ input{background:transparent;border-bottom:1px solid var(--accent);color:var(--i
 .flick{animation:fl 6s infinite}
 @keyframes fl{0%,92%,100%{opacity:1}93%{opacity:.6}95%{opacity:1}97%{opacity:.4}}
 @media (prefers-reduced-motion:reduce){.flick,.shake{animation:none}}
-@media (hover:none){body{cursor:auto}#cursor{display:none}}
+@media (hover:none){#cursor{display:none}}
 </style>
 </head>
 <body>
@@ -43,7 +46,7 @@ input{background:transparent;border-bottom:1px solid var(--accent);color:var(--i
   </header>
   <article id="escena"></article>
   <footer class="mt-16 text-sm opacity-60">
-    <p>Finales descubiertos: <span id="finales">0</span> de 10</p>
+    <p>A ver qué final te toca a ti…</p>
     <button id="reiniciar" class="underline mt-2">Volver a empezar</button>
   </footer>
 </main>
@@ -161,11 +164,8 @@ function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);stat
   $("resp").focus()}
  lightInk()}
 function end(n){const e=E[n];stage(n===9||n===7?2:5);
- let got=[];try{got=JSON.parse(localStorage.getItem("valdemar-finales")||"[]")}catch(_){}
- if(!got.includes(n))got.push(n);try{localStorage.setItem("valdemar-finales",JSON.stringify(got))}catch(_){}
- $("finales").textContent=got.length;
  const col=e.bueno===true?"#9fc79a":e.bueno===false?"#c46a5a":"#c9a45c";
- $("escena").innerHTML=`<p class="mb-2" style="color:${col}">Final ${n} de 10</p><h1 class="sc text-4xl sm:text-5xl mb-6">${e.t}</h1>
+ $("escena").innerHTML=`<p class="mb-2" style="color:${col}">Te tocó el final ${n}</p><h1 class="sc text-4xl sm:text-5xl mb-6">${e.t}</h1>
  <p class="text-lg leading-relaxed">${e.x}</p><button id="otra" class="btn mt-10">Intentar otro camino</button>`;
  $("otra").onclick=()=>{reset();go("intro")};window.scrollTo(0,0)}
 
@@ -179,7 +179,6 @@ addEventListener("touchmove",e=>{const t=e.touches[0];move(t.clientX,t.clientY)}
 addEventListener("touchstart",e=>{const t=e.touches[0];move(t.clientX,t.clientY)},{passive:true});
 addEventListener("scroll",lightInk,{passive:true});
 $("reiniciar").onclick=()=>{reset();go("intro")};
-try{$("finales").textContent=JSON.parse(localStorage.getItem("valdemar-finales")||"[]").length}catch(_){}
 reset();go("intro");
 </script>
 </body>
