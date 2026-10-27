@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misterio en la Mansión - Minijuego</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --success: #22c55e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 600px;
+            padding: 25px;
+            box-sizing: border-box;
+            border: 1px solid #334155;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        button.choice-btn {
+            background-color: #334155;
+            color: var(--text-color);
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        button.choice-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            transform: translateX(4px);
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #334155;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div class="status-bar">
+        <span id="location-name">Lugar: Vestíbulo</span>
+        <span id="clues-count">Pistas: 0/3</span>
+    </div>
+    <div id="game-content">
+        <!-- Contenido dinámico por JS -->
+    </div>
+</div>
+
+<script>
+    const gameState = {
+        currentScene: 'hall',
+        clues: 0,
+        hasKey: false
+    };
+
+    const scenes = {
+        hall: {
+            title: "El Vestíbulo Oscuro",
+            text: "Entras a la antigua mansión del profesor Blackwood. La puerta se cierra de golpe a tus espaldas. El aire huele a humedad y misterio. Frente a una escalera de roble, hay una mesita con un extraño diario y una puerta lateral abierta.",
+            choices: [
+                { text: "Revisar la mesita y leer el diario", action: () => goToScene('diary') },
+                { text: "Entrar por la puerta lateral hacia la biblioteca", action: () => goToScene('library') },
+                { text: "Intentar abrir la puerta principal", action: () => alert("¡Está cerrada con seguro! Debes encontrar otra salida.") }
+            ]
+        },
+        diary: {
+            title: "El Diario del Profesor",
+            text: "Pasas las páginas polvorientas. Una nota cae al suelo: <br><em>'La combinación de la caja fuerte oculta en mi estudio es el número de pinturas colgadas en la mansión (4) menos uno... El secreto está en los libros.'</em><br><b>¡Has descubierto una pista clave!</b>",
+            action: () => {
+                if(!gameState.hasKey && gameState.clues < 1) gameState.clues++;
+                updateStatus();
+            },
+            choices: [
+                { text: "Ir a la biblioteca", action: () => goToScene('library') },
+                { text: "Volver al vestíbulo", action: () => goToScene('hall') }
+            ]
+        },
+        library: {
+            title: "La Biblioteca silenciosa",
+            text: "Estanterías gigantescas llegan hasta el techo. En el centro hay un escritorio con un cajón cerrado con llave y una estantería ligeramente movida.",
+            choices: [
+                { text: "Empujar la estantería secreta", action: () => goToScene('secretRoom') },
+                { text: "Inspeccionar el escritorio cerrado", action: () => {
+                    if(gameState.hasKey) {
+                        goToScene('win');
+                    } else {
+                        alert("El escritorio está cerrado con llave. Necesitas encontrarla.");
+                    }
+                }},
+                { text: "Volver al vestíbulo", action: () => goToScene('hall') }
+            ]
+        },
+        secretRoom: {
+            title: "La Habitación Oculta",
+            text: "Al mover la estantería, encuentras una pequeña caja fuerte empotrada en la pared y una llave dorada colgada en la pared junto a ella.",
+            action: () => {
+                gameState.hasKey = true;
+                if(gameState.clues < 2) gameState.clues++;
+                updateStatus();
+            },
+            choices: [
+                { text: "Tomar la llave dorada y regresar a la biblioteca", action: () => goToScene('library') }
+            ]
+        },
+        win: {
+            title: "¡Misterio Resuelto!",
+            text: "Abres el escritorio con la llave dorada y descubres el testamento del profesor y un pasadizo que conduce al jardín exterior a plena luz del día. ¡Has escapado y resuelto el misterio con éxito!",
+            choices: [
+                { text: "Jugar de nuevo", action: () => resetGame() }
+            ]
+        }
+    };
+
+    function goToScene(sceneKey) {
+        gameState.current
