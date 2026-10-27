@@ -15,11 +15,32 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{min-height:100%}
 body{margin:0;background:#0e0a07;background-image:var(--bg);background-attachment:fixed;color:var(--ink);
-  font-family:"IM Fell English",Georgia,"Times New Roman",serif;transition:background 1.5s,color 1.5s;cursor:crosshair}
+  font-family:"IM Fell English",Georgia,"Times New Roman",serif;transition:background 1.5s,color 1.5s;cursor:default}
 button,input{cursor:pointer;position:relative;z-index:60}
 input{cursor:text}
 .sc{font-family:"IM Fell English SC",Georgia,serif}
-#luz,#cursor{pointer-events:none!important}
+#luz,#cursor,#deco{pointer-events:none!important}
+#deco{position:fixed;inset:0;z-index:0;opacity:.6;transition:opacity 1s;background-repeat:no-repeat}
+.d-intro{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Cpath fill='%23050302' d='M0 200V150h60v-40l40-30 40 30v-60h20v-20l20-20 20 20v20h20v60l40-30 40 30v40h60v50z'/%3E%3Crect x='190' y='45' width='10' height='14' fill='%23e8c070'/%3E%3C/svg%3E") bottom/100% auto no-repeat,radial-gradient(circle at 82% 16%,#f3e3b0 0 38px,rgba(243,227,176,.15) 40px 90px,transparent 92px)}
+.d-vestibulo{background:radial-gradient(ellipse at 50% 6%,rgba(255,200,120,.35),transparent 35%),repeating-linear-gradient(90deg,transparent 0 90px,rgba(201,164,92,.12) 90px 96px)}
+.d-sotano{background:radial-gradient(circle at 12% 88%,rgba(90,255,120,.25),transparent 30%),linear-gradient(#000 3px,transparent 3px) 0 0/70px 35px,linear-gradient(90deg,#000 3px,transparent 3px) 0 0/70px 70px,linear-gradient(90deg,#000 3px,transparent 3px) 35px 35px/70px 70px,#2a1810;opacity:.45}
+.d-hall{background:repeating-linear-gradient(150deg,rgba(130,85,50,.22) 0 28px,transparent 28px 56px);-webkit-mask:linear-gradient(to top left,#000 30%,transparent 70%);mask:linear-gradient(to top left,#000 30%,transparent 70%)}
+.d-musica{background:repeating-linear-gradient(90deg,transparent 0 26px,#000 26px 40px,transparent 40px 52px) bottom/100% 14% no-repeat,repeating-linear-gradient(90deg,#cfc5b3 0 50px,#000 50px 52px) bottom/100% 22% no-repeat;opacity:.35}
+.d-biblioteca,.d-rescate{background:repeating-linear-gradient(0deg,#2a170c 0 12px,transparent 12px 130px),repeating-linear-gradient(90deg,#5a2a1a 0 14px,#2b3a22 14px 26px,#4a3a1a 26px 36px,#1d1d2e 36px 50px,#000 50px 56px);opacity:.4}
+.d-pasillo{background:linear-gradient(90deg,transparent 46%,rgba(201,164,92,.5) 46% 47%,transparent 47% 53%,rgba(201,164,92,.5) 53% 54%,transparent 54%) 50% 100%/100% 45% no-repeat,radial-gradient(circle at 50% 78%,#c9a45c 0 6px,transparent 7px),repeating-linear-gradient(90deg,transparent 0 30px,rgba(201,164,92,.3) 30px 36px,rgba(0,0,0,.6) 36px 140px,rgba(201,164,92,.3) 140px 146px,transparent 146px 180px) 0 8%/100% 180px no-repeat}
+.d-laboratorio,.d-laboratorio2{background:radial-gradient(circle at 20% 70%,rgba(90,255,140,.35) 0 6px,transparent 7px),radial-gradient(circle at 24% 55%,rgba(90,255,140,.3) 0 4px,transparent 5px),radial-gradient(circle at 80% 40%,rgba(90,255,140,.3) 0 8px,transparent 9px),radial-gradient(ellipse at 50% 100%,rgba(60,200,110,.3),transparent 50%),linear-gradient(rgba(80,200,120,.08) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(80,200,120,.08) 1px,transparent 1px) 0 0/40px 40px;animation:burb 4s ease-in-out infinite alternate}
+.d-archivos{background:repeating-linear-gradient(0deg,rgba(80,255,140,.08) 0 2px,transparent 2px 4px),radial-gradient(ellipse at center,rgba(60,200,110,.25),transparent 60%)}
+.d-camara{background:radial-gradient(circle at 50% 55%,rgba(200,20,20,.55),transparent 40%),repeating-radial-gradient(circle at 50% 55%,transparent 0 40px,rgba(200,20,20,.08) 40px 42px);animation:latido 1.4s infinite}
+.d-boveda{background:radial-gradient(circle at 25% 85%,rgba(220,40,40,.45),transparent 18%),radial-gradient(circle at 50% 85%,rgba(40,220,90,.45),transparent 18%),radial-gradient(circle at 75% 85%,rgba(40,90,240,.45),transparent 18%)}
+.d-fin{background:radial-gradient(ellipse at 50% 0%,rgba(140,10,10,.45),transparent 60%)}
+.d-fin6{background:linear-gradient(to top,rgba(255,110,20,.6),rgba(180,30,0,.3) 30%,transparent 60%);animation:fuego .8s infinite alternate}
+.d-fin7,.d-fin9{background:linear-gradient(to top,rgba(255,190,120,.45),rgba(120,140,200,.15) 50%,transparent 80%)}
+.d-fin8{background:repeating-radial-gradient(circle at 50% 50%,transparent 0 30px,rgba(201,164,92,.15) 30px 32px);animation:giro 8s linear infinite}
+@keyframes burb{to{background-position:0 -30px,0 -40px,0 -20px,0 0,0 0,0 0}}
+@keyframes latido{0%,100%{opacity:.5}15%{opacity:.85}30%{opacity:.55}45%{opacity:.8}}
+@keyframes fuego{to{opacity:.85}}
+@keyframes giro{to{transform:scale(1.4)}}
+@media (prefers-reduced-motion:reduce){#deco{animation:none!important}}
 #luz{position:fixed;inset:0;z-index:40;transition:opacity .3s;
   background:radial-gradient(circle var(--r) at var(--x,50%) var(--y,50%),rgba(255,214,150,.07) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,var(--dark)) 100%)}
 #cursor{position:fixed;width:14px;height:14px;border-radius:50%;background:#ffe2a8;box-shadow:0 0 18px 6px rgba(255,200,120,.5);
@@ -37,7 +58,7 @@ input{background:transparent;border-bottom:1px solid var(--accent);color:var(--i
 </style>
 </head>
 <body>
-<div id="luz"></div><div id="cursor"></div>
+<div id="deco"></div><div id="luz"></div><div id="cursor" hidden></div>
 
 <main class="relative z-10 max-w-2xl mx-auto px-5 py-10 sm:py-16">
   <header class="flex justify-between items-baseline mb-10 text-sm opacity-80">
@@ -146,7 +167,7 @@ function stage(n){const s=STAGES[n],r=document.documentElement.style;
 function status(){const it=[S.f.llave&&"llave oxidada",S.f.diario&&"diario",S.f.foto&&"foto de Elena",S.f.aliado&&"Bastián"].filter(Boolean);
  $("estado").textContent="Cordura "+"●".repeat(Math.max(S.cordura,0))+"○".repeat(5-Math.max(S.cordura,0))+(it.length?" | "+it.join(", "):"")}
 function resolve(t){if(typeof t==="function")t=t();if(typeof t==="string")return go(t);end(t.end)}
-function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);status();
+function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);$("deco").className="d-"+id;status();
  let h=`<h1 class="sc text-4xl sm:text-5xl mb-6 leading-tight" style="color:var(--accent)">${sc.t}</h1><div class="space-y-4 text-lg leading-relaxed">${sc.x}</div>`;
  if(sc.ch)h+=`<div class="mt-8 space-y-3">${sc.ch.map((c,i)=>`<button class="btn" data-i="${i}">${c.t}</button>`).join("")}</div>`;
  if(sc.rq){const max=sc.rq.tries||3;h+=`<div id="rq" class="mt-8 p-5 border" style="border-color:var(--accent)">
@@ -163,7 +184,7 @@ function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);stat
   $("pista").onclick=()=>{S.cordura--;status();if(S.cordura<=0)return end(10);$("msg").textContent=sc.rq.pista;$("pista").remove()};
   $("resp").focus()}
  lightInk()}
-function end(n){const e=E[n];stage(n===9||n===7?2:5);
+function end(n){const e=E[n];$("deco").className="d-fin d-fin"+n;stage(n===9||n===7?2:5);
  const col=e.bueno===true?"#9fc79a":e.bueno===false?"#c46a5a":"#c9a45c";
  $("escena").innerHTML=`<p class="mb-2" style="color:${col}">Te tocó el final ${n}</p><h1 class="sc text-4xl sm:text-5xl mb-6">${e.t}</h1>
  <p class="text-lg leading-relaxed">${e.x}</p><button id="otra" class="btn mt-10">Intentar otro camino</button>`;
