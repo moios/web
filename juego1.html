@@ -26,7 +26,7 @@ input{cursor:text}
 button,input{cursor:pointer;position:relative;z-index:60}
 input{cursor:text}
 .sc{font-family:"IM Fell English SC",Georgia,serif}
-#luz,#cursor,#deco{pointer-events:none!important}
+#luz,#deco{pointer-events:none!important}
 #deco{position:fixed;inset:0;z-index:0;opacity:.6;transition:opacity 1s;background-repeat:no-repeat}
 .d-intro{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Cpath fill='%23050302' d='M0 200V150h60v-40l40-30 40 30v-60h20v-20l20-20 20 20v20h20v60l40-30 40 30v40h60v50z'/%3E%3Crect x='190' y='45' width='10' height='14' fill='%23e8c070'/%3E%3C/svg%3E") bottom/100% auto no-repeat,radial-gradient(circle at 82% 16%,#f3e3b0 0 38px,rgba(243,227,176,.15) 40px 90px,transparent 92px)}
 .d-vestibulo{background:radial-gradient(ellipse at 50% 6%,rgba(255,200,120,.35),transparent 35%),repeating-linear-gradient(90deg,transparent 0 90px,rgba(201,164,92,.12) 90px 96px)}
@@ -51,22 +51,21 @@ input{cursor:text}
 >>>>>>> 223293d8dee9a56e1378cf771e39728ad9479267
 #luz{position:fixed;inset:0;z-index:40;transition:opacity .3s;
   background:radial-gradient(circle var(--r) at var(--x,50%) var(--y,50%),rgba(255,214,150,.07) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,var(--dark)) 100%)}
-#cursor{position:fixed;width:14px;height:14px;border-radius:50%;background:#ffe2a8;box-shadow:0 0 18px 6px rgba(255,200,120,.5);
-  pointer-events:none;z-index:50;transform:translate(-50%,-50%)}
+.k{border:1px solid var(--accent);min-width:2.1rem;padding:.3rem .45rem;font-size:.95rem;position:relative;z-index:60}.k:hover{background:rgba(201,164,92,.2)}
 .ink{color:#2a2018;transition:color .1s;font-style:italic}
 .btn{border:1px solid var(--accent);color:var(--ink);padding:.7rem 1rem;text-align:left;transition:background .2s,transform .2s;width:100%}
 .btn:hover,.btn:focus-visible{background:rgba(201,164,92,.15);transform:translateX(4px);outline:none}
-input{background:transparent;border-bottom:1px solid var(--accent);color:var(--ink);outline:none;padding:.4rem 0;width:100%;font-size:1.15rem}
+input{-webkit-user-select:text;user-select:text;pointer-events:auto;background:transparent;border-bottom:1px solid var(--accent);color:var(--ink);outline:none;padding:.4rem 0;width:100%;font-size:1.15rem}
 .shake{animation:sh .4s}
 @keyframes sh{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .flick{animation:fl 6s infinite}
 @keyframes fl{0%,92%,100%{opacity:1}93%{opacity:.6}95%{opacity:1}97%{opacity:.4}}
 @media (prefers-reduced-motion:reduce){.flick,.shake{animation:none}}
-@media (hover:none){#cursor{display:none}}
+
 </style>
 </head>
 <body>
-<div id="deco"></div><div id="luz"></div><div id="cursor" hidden></div>
+<div id="deco"></div><div id="luz"></div>
 
 <main class="relative z-10 max-w-2xl mx-auto px-5 py-10 sm:py-16">
   <header class="flex justify-between items-baseline mb-10 text-sm opacity-80">
@@ -179,7 +178,7 @@ function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);$("d
  let h=`<h1 class="sc text-4xl sm:text-5xl mb-6 leading-tight" style="color:var(--accent)">${sc.t}</h1><div class="space-y-4 text-lg leading-relaxed">${sc.x}</div>`;
  if(sc.ch)h+=`<div class="mt-8 space-y-3">${sc.ch.map((c,i)=>`<button class="btn" data-i="${i}">${c.t}</button>`).join("")}</div>`;
  if(sc.rq){const max=sc.rq.tries||3;h+=`<div id="rq" class="mt-8 p-5 border" style="border-color:var(--accent)">
-  <p class="mb-4 italic">${sc.rq.q}</p><input id="resp" autocomplete="off" aria-label="Respuesta">
+  <p class="mb-4 italic">${sc.rq.q}</p><input id="resp" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Respuesta"><div id="kb" class="flex flex-wrap gap-1 mt-3"></div>
   <div class="flex gap-3 mt-4 flex-wrap"><button id="enviar" class="btn !w-auto">Responder</button><button id="pista" class="btn !w-auto">Pedir pista (cuesta cordura)</button></div>
   <p id="msg" class="mt-3 text-sm" aria-live="polite">Intentos: ${max}</p></div>`}
  const a=$("escena");a.innerHTML=h;window.scrollTo(0,0);
@@ -188,9 +187,12 @@ function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);$("d
    if(sc.rq.a.map(norm).includes(v)){sc.rq.okfx&&sc.rq.okfx();resolve(sc.rq.ok)}
    else{n--;$("rq").classList.remove("shake");void $("rq").offsetWidth;$("rq").classList.add("shake");
     if(n<=0){$("msg").textContent=sc.rq.fx||"";setTimeout(()=>resolve(sc.rq.fail),1200)}else $("msg").textContent=`Incorrecto. Intentos: ${n}`}};
-  $("enviar").onclick=send;$("resp").onkeydown=e=>e.key==="Enter"&&send();
+  const inp=$("resp"),kb=$("kb");
+  "1234567890.ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("").concat(["⌫"]).forEach(c=>{const k=document.createElement("button");k.className="k";k.type="button";k.textContent=c;
+   k.onclick=()=>{inp.value=c==="⌫"?inp.value.slice(0,-1):inp.value+c};kb.appendChild(k)});
+  $("enviar").onclick=send;$("resp").addEventListener("keydown",e=>{if(e.key==="Enter")send()});
   $("pista").onclick=()=>{S.cordura--;status();if(S.cordura<=0)return end(10);$("msg").textContent=sc.rq.pista;$("pista").remove()};
-  $("resp").focus()}
+  }
  lightInk()}
 <<<<<<< HEAD
 function end(n){const e=E[n];stage(n===9||n===7?2:5);
@@ -205,8 +207,7 @@ function end(n){const e=E[n];$("deco").className="d-fin d-fin"+n;stage(n===9||n=
 let mx=innerWidth/2,my=innerHeight/2;
 function lightInk(){document.querySelectorAll(".ink").forEach(el=>{const r=el.getBoundingClientRect();
  const d=Math.hypot(mx-(r.left+r.width/2),my-(r.top+r.height/2));el.style.color=d<160?"#f3d9a4":"#2a2018"})}
-function move(x,y){mx=x;my=y;const r=document.documentElement.style;r.setProperty("--x",x+"px");r.setProperty("--y",y+"px");
- $("cursor").style.left=x+"px";$("cursor").style.top=y+"px";lightInk()}
+function move(x,y){mx=x;my=y;const r=document.documentElement.style;r.setProperty("--x",x+"px");r.setProperty("--y",y+"px");lightInk()}
 addEventListener("mousemove",e=>move(e.clientX,e.clientY));
 addEventListener("touchmove",e=>{const t=e.touches[0];move(t.clientX,t.clientY)},{passive:true});
 addEventListener("touchstart",e=>{const t=e.touches[0];move(t.clientX,t.clientY)},{passive:true});
