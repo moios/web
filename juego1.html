@@ -15,6 +15,13 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{min-height:100%}
 body{margin:0;background:#0e0a07;background-image:var(--bg);background-attachment:fixed;color:var(--ink);
+<<<<<<< HEAD
+  font-family:"IM Fell English",Georgia,"Times New Roman",serif;transition:background 1.5s,color 1.5s;cursor:crosshair}
+button,input{cursor:pointer;position:relative;z-index:60}
+input{cursor:text}
+.sc{font-family:"IM Fell English SC",Georgia,serif}
+#luz,#cursor{pointer-events:none!important}
+=======
   font-family:"IM Fell English",Georgia,"Times New Roman",serif;transition:background 1.5s,color 1.5s;cursor:default}
 button,input{cursor:pointer;position:relative;z-index:60}
 input{cursor:text}
@@ -41,6 +48,7 @@ input{cursor:text}
 @keyframes fuego{to{opacity:.85}}
 @keyframes giro{to{transform:scale(1.4)}}
 @media (prefers-reduced-motion:reduce){#deco{animation:none!important}}
+>>>>>>> 223293d8dee9a56e1378cf771e39728ad9479267
 #luz{position:fixed;inset:0;z-index:40;transition:opacity .3s;
   background:radial-gradient(circle var(--r) at var(--x,50%) var(--y,50%),rgba(255,214,150,.07) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,var(--dark)) 100%)}
 .k{border:1px solid var(--accent);min-width:2.1rem;padding:.3rem .45rem;font-size:.95rem;position:relative;z-index:60}.k:hover{background:rgba(201,164,92,.2)}
@@ -186,7 +194,11 @@ function go(id){if(S.cordura<=0)return end(10);const sc=SC[id];stage(sc.st);$("d
   $("pista").onclick=()=>{S.cordura--;status();if(S.cordura<=0)return end(10);$("msg").textContent=sc.rq.pista;$("pista").remove()};
   }
  lightInk()}
+<<<<<<< HEAD
+function end(n){const e=E[n];stage(n===9||n===7?2:5);
+=======
 function end(n){const e=E[n];$("deco").className="d-fin d-fin"+n;stage(n===9||n===7?2:5);
+>>>>>>> 223293d8dee9a56e1378cf771e39728ad9479267
  const col=e.bueno===true?"#9fc79a":e.bueno===false?"#c46a5a":"#c9a45c";
  $("escena").innerHTML=`<p class="mb-2" style="color:${col}">Te tocó el final ${n}</p><h1 class="sc text-4xl sm:text-5xl mb-6">${e.t}</h1>
  <p class="text-lg leading-relaxed">${e.x}</p><button id="otra" class="btn mt-10">Intentar otro camino</button>`;
